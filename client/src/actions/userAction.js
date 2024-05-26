@@ -20,7 +20,7 @@ export const login = (email, password) => async (dispatch) => {
 
     const config = { headers: { "Content-Type": "application/json" } };
     const { data } = await axios.post(
-      `https://seal-app-35w5i.ondigitalocean.app/auth/login`,
+      `https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/login`,
       { email, password },
       config
     );
@@ -34,7 +34,9 @@ export const login = (email, password) => async (dispatch) => {
 //Logout  user details
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get(`hhttps://seal-app-35w5i.ondigitalocean.app/auth/logout`);
+    await axios.get(
+      `hhttps://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/logout`
+    );
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
@@ -50,7 +52,7 @@ export const register = (userData) => async (dispatch) => {
     const config = { headers: { "Content-Type": "application/json" } };
 
     const { data } = await axios.post(
-      "https://seal-app-35w5i.ondigitalocean.app/auth/register",
+      "https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/register",
       userData,
       config
     );
@@ -68,7 +70,7 @@ export const laodUser = () => async (dispatch) => {
     dispatch({ type: LOAD_USER_REQUEST });
 
     const { data } = await axios.get(
-      `https://seal-app-35w5i.ondigitalocean.app/auth/me`
+      `https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/me`
     );
 
     console.log(data);

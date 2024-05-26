@@ -18,7 +18,7 @@ const SignIn = () => {
   };
 
   const opengoogleLogin = () => {
-    window.open("https://seal-app-35w5i.ondigitalocean.app/auth/google");
+    window.open("https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/google");
   };
   useEffect(() => {
     if (isAuthenticated) {

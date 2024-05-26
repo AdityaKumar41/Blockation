@@ -18,7 +18,7 @@ export const getUploadedFiles =
 
       console.log(currentPage);
       const { data } = await axios.get(
-        `https://seal-app-35w5i.ondigitalocean.app/auth/me/uploadedfiles?page=${currentPage}&keyword=${keyword}`
+        `https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/me/uploadedfiles?page=${currentPage}&keyword=${keyword}`
       );
 
       console.log(data);
@@ -64,7 +64,7 @@ export const uploadFiles =
         },
       };
       const { data } = await axios.post(
-        `https://seal-app-35w5i.ondigitalocean.app/file/sendfile`,
+        `https://blockation.d3sulnq4v9fekq.amplifyapp.com/file/sendfile`,
         formData,
         cid,
         isCert,
@@ -72,7 +72,7 @@ export const uploadFiles =
       );
       console.log(data);
       dispatch({ type: UPLOAD_FILE_SUCCESS, payload: data });
-      fetch("https://seal-app-35w5i.ondigitalocean.app/file/getAllFiles")
+      fetch("https://blockation.d3sulnq4v9fekq.amplifyapp.com/file/getAllFiles")
         .then((response) => response.json())
         .then((data) => {
           window.location.href = data.redirectUrl;

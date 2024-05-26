@@ -10,7 +10,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const googlehandler = () => {
-    window.open(`https://seal-app-35w5i.ondigitalocean.app/auth/google`);
+    window.open(`https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/google`);
   };
   const [confirmPassword, setconfirmPassword] = useState("");
   const registerSubmit = (e) => {
