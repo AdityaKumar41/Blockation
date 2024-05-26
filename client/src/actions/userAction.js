@@ -24,7 +24,16 @@ export const login = (email, password) => async (dispatch) => {
       { email, password },
       config
     );
-    console.log(data);
+
+    // Set cookies here
+    if (data && data.success) {
+      // Assuming your cookies are set in the response headers,
+      // you can modify this part based on your actual implementation
+      const { profile, email } = data.user;
+      document.cookie = `profile=${profile};`;
+      document.cookie = `email=${email};`;
+    }
+
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
@@ -35,8 +44,12 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   try {
     await axios.get(
-      `hhttps://hammerhead-app-jyvj3.ondigitalocean.app/auth/logout`
+      `https://hammerhead-app-jyvj3.ondigitalocean.app/auth/logout`
     );
+
+    // Clear cookies on logout
+    document.cookie = "profile=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
