@@ -25,7 +25,7 @@ connectDataBase();
 
 app.use(
   cors({
-    origin: "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app",
+    origin: "https://blockation.d3sulnq4v9fekq.amplifyapp.com",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })

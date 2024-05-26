@@ -38,6 +38,6 @@ exports.sendFile = async (req, res) => {
 exports.getAllFiles = (req, res) => {
   res.json({
     redirectUrl:
-      "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app//file/getAllFiles",
+      "https://blockation.d3sulnq4v9fekq.amplifyapp.com/file/getAllFiles",
   });
 };
