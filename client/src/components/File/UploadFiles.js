@@ -3,36 +3,38 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { uploadFiles } from "../../actions/fileAction";
 import Hero from "../layout/Hero";
-import { create } from '@web3-storage/w3up-client'
- 
+import { create } from "@web3-storage/w3up-client";
+
 function UploadFiles() {
   const [upload, setUpload] = useState("");
-  const [fileName,setFilename]  = useState("")
-  const [yes,setYes] = useState(false)
+  const [fileName, setFilename] = useState("");
+  const [yes, setYes] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const formSubmit = async(e) => {
-        e.preventDefault();
-        console.log(upload);
-        const client = await create()
-        const account = await client.login(`chaitutatipamula023@gmail.com`)
-        const space = await client.createSpace('Blocation')
-        await client.addSpace(await space.createAuthorization(client))
-        await account.provision(space.did())
-        const currentSpace = await client.setCurrentSpace(`did:key:z6Mks5PaV1V73nqw7D87BbbmJ3XVkeL1kWiFt3BSaNMkdxiM`)
-        const recovery = await space.createRecovery(account.did())
-        await client.capability.access.delegate({
-          space: space.did(),
-          delegations: [recovery],
-        })
-        await client.addSpace(await space.createAuthorization(client))
-        const uploadingFile = new File([upload],fileName)
-        console.log(uploadingFile);
-        const filecid = await client.uploadDirectory([uploadingFile]); 
-        console.log(filecid.toString());
-        dispatch(uploadFiles({"file":upload,"cid":filecid.toString(),"isCert":yes}));
-
-        
+  const formSubmit = async (e) => {
+    e.preventDefault();
+    console.log(upload);
+    const client = await create();
+    const account = await client.login(`chaitutatipamula023@gmail.com`);
+    const space = await client.createSpace("Blocation");
+    await client.addSpace(await space.createAuthorization(client));
+    await account.provision(space.did());
+    const currentSpace = await client.setCurrentSpace(
+      `did:key:z6Mks5PaV1V73nqw7D87BbbmJ3XVkeL1kWiFt3BSaNMkdxiM`
+    );
+    const recovery = await space.createRecovery(account.did());
+    await client.capability.access.delegate({
+      space: space.did(),
+      delegations: [recovery],
+    });
+    await client.addSpace(await space.createAuthorization(client));
+    const uploadingFile = new File([upload], fileName);
+    console.log(uploadingFile);
+    const filecid = await client.uploadDirectory([uploadingFile]);
+    console.log(filecid.toString());
+    dispatch(
+      uploadFiles({ file: upload, cid: filecid.toString(), isCert: yes })
+    );
   };
   const formDataChange = (e) => {
     const file = e.target.files[0];
@@ -43,7 +45,7 @@ function UploadFiles() {
         console.log(file);
         const fileData = new Blob([reader.result]);
         const fileObject = new File([fileData], file.name);
-        setFilename(file.name)
+        setFilename(file.name);
         setUpload(fileObject);
       }
     };
@@ -68,7 +70,7 @@ function UploadFiles() {
                 <div class="flex justify-center ">
                   <div class="py-4 pr-5">
                     <form
-                      action="https://blockation-s3uo.onrender.com/file/sendfile"
+                      action="https://seal-app-35w5i.ondigitalocean.app/file/sendfile"
                       method="post"
                       onSubmit={formSubmit}
                       encType="multipart/form-data"
@@ -79,8 +81,11 @@ function UploadFiles() {
                         className="form-control"
                         name="upload"
                         multiple
-                        onChange={()=>{setYes(!yes)}}
-                      /><br/>
+                        onChange={() => {
+                          setYes(!yes);
+                        }}
+                      />
+                      <br />
                       <input
                         type="file"
                         className="form-control"
