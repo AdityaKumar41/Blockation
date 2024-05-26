@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   cookieSession({
     name: "session",
-    keys: ["profile", "email"],
+    keys: ["_id", "email"],
     maxAge: 24 * 60 * 60 * 1000,
     secure: process.env.NODE_ENV === "PRODUCTION", // Set cookies to secure in production
     httpOnly: true, // Ensure cookies are not accessible via client-side JavaScript
