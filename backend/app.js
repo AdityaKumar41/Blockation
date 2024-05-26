@@ -25,7 +25,7 @@ connectDataBase();
 
 app.use(
   cors({
-    origin: "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app/",
+    origin: "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -39,7 +39,7 @@ app.use(
   cookieSession({
     name: "session",
     keys: ["profile", "email"],
-    maxAge: 24 * 60 * 60 * 100,
+    maxAge: 24 * 60 * 60 * 1000,
   })
 );
 
