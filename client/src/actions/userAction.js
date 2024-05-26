@@ -29,8 +29,8 @@ export const login = (email, password) => async (dispatch) => {
     if (data && data.success) {
       // Assuming your cookies are set in the response headers,
       // you can modify this part based on your actual implementation
-      const { profile, email } = data.user;
-      document.cookie = `profile=${profile};`;
+      const { _id, email } = data.user;
+      document.cookie = `_id=${_id};`;
       document.cookie = `email=${email};`;
     }
 
@@ -48,7 +48,7 @@ export const logout = () => async (dispatch) => {
     );
 
     // Clear cookies on logout
-    document.cookie = "profile=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 
     dispatch({ type: LOGOUT_SUCCESS });
