@@ -18,7 +18,7 @@ export const getUploadedFiles =
 
       console.log(currentPage);
       const { data } = await axios.get(
-        `https://blockation.d3sulnq4v9fekq.amplifyapp.com/auth/me/uploadedfiles?page=${currentPage}&keyword=${keyword}`
+        `https://hammerhead-app-jyvj3.ondigitalocean.app/auth/me/uploadedfiles?page=${currentPage}&keyword=${keyword}`
       );
 
       console.log(data);
@@ -64,7 +64,7 @@ export const uploadFiles =
         },
       };
       const { data } = await axios.post(
-        `https://blockation.d3sulnq4v9fekq.amplifyapp.com/file/sendfile`,
+        `https://hammerhead-app-jyvj3.ondigitalocean.app/file/sendfile`,
         formData,
         cid,
         isCert,
@@ -72,7 +72,7 @@ export const uploadFiles =
       );
       console.log(data);
       dispatch({ type: UPLOAD_FILE_SUCCESS, payload: data });
-      fetch("https://blockation.d3sulnq4v9fekq.amplifyapp.com/file/getAllFiles")
+      fetch("https://hammerhead-app-jyvj3.ondigitalocean.app/file/getAllFiles")
         .then((response) => response.json())
         .then((data) => {
           window.location.href = data.redirectUrl;

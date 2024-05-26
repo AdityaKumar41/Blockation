@@ -70,7 +70,7 @@ function UploadFiles() {
                 <div class="flex justify-center ">
                   <div class="py-4 pr-5">
                     <form
-                      action="https://blockation.d3sulnq4v9fekq.amplifyapp.com/file/sendfile"
+                      action="https://hammerhead-app-jyvj3.ondigitalocean.app/file/sendfile"
                       method="post"
                       onSubmit={formSubmit}
                       encType="multipart/form-data"
