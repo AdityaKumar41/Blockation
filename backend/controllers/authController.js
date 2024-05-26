@@ -1,5 +1,6 @@
 const passport = require("passport");
-const CLIENT_URL = "https://seal-app-35w5i.ondigitalocean.app/";
+const CLIENT_URL =
+  "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app//";
 const User = require("../models/localUser");
 const bcrypt = require("bcryptjs");
 const ErroHandler = require("../utils/errorhander");

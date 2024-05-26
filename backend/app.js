@@ -25,7 +25,7 @@ connectDataBase();
 
 app.use(
   cors({
-    origin: "https://seal-app-35w5i.ondigitalocean.app",
+    origin: "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app/",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })

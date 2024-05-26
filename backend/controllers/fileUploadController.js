@@ -37,6 +37,7 @@ exports.sendFile = async (req, res) => {
 
 exports.getAllFiles = (req, res) => {
   res.json({
-    redirectUrl: "https://seal-app-35w5i.ondigitalocean.app/file/getAllFiles",
+    redirectUrl:
+      "https://blockation-ffth20iat-adityakumar41s-projects.vercel.app//file/getAllFiles",
   });
 };
