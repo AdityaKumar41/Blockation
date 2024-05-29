@@ -1,74 +1,82 @@
-
-import axios from 'axios'
-import {LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOGIN_FAIL,LOGIN_REQUEST,LOGIN_SUCCESS, LOGOUT_FAIL, LOGOUT_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS} from "../constants/userConstants"
+import axios from "axios";
+import {
+  LOAD_USER_FAIL,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOGIN_FAIL,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT_FAIL,
+  LOGOUT_SUCCESS,
+  REGISTER_USER_FAIL,
+  REGISTER_USER_REQUEST,
+  REGISTER_USER_SUCCESS,
+} from "../constants/userConstants";
 
 //Login User
-export const login=(email,password)=>async (dispatch)=>{
-    try{
-        dispatch({type:LOGIN_REQUEST})
-        
-    const config = { headers: { "Content-Type": "application/json" } };
-        const {data}=await axios.post(
-            `http://localhost:7000/auth/login`,
-            {email,password},
-            config
-        )
-        console.log(data);
-        dispatch({type:LOGIN_SUCCESS,payload:data.user})
-    }catch(error){
-        dispatch({type:LOGIN_FAIL,payload:error.response.data.message})
-    }
-}
+export const login = (email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_REQUEST });
 
+    const config = { headers: { "Content-Type": "application/json" } };
+    const { data } = await axios.post(
+      `https://jellyfish-app-4v9we.ondigitalocean.app/auth/login`,
+      { email, password },
+      config
+    );
+    console.log(data);
+    dispatch({ type: LOGIN_SUCCESS, payload: data.user });
+  } catch (error) {
+    dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+  }
+};
 
 //Logout  user details
-export const logout=()=>async (dispatch)=>{
-    try{
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get(
+      `https://jellyfish-app-4v9we.ondigitalocean.app/auth/logout`
+    );
 
-     await axios.get(`http://localhost:7000/auth/logout`);
-
-
-        
-        dispatch({type:LOGOUT_SUCCESS})
-    }catch(error){
-        dispatch({type:LOGOUT_FAIL,payload:error.response.data.message})
-    }
-}
+    dispatch({ type: LOGOUT_SUCCESS });
+  } catch (error) {
+    dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
+  }
+};
 
 //Register User
-export const register=(userData)=>async (dispatch)=>{
-    try{
-        dispatch({type:REGISTER_USER_REQUEST})
-        
+export const register = (userData) => async (dispatch) => {
+  try {
+    dispatch({ type: REGISTER_USER_REQUEST });
+
     const config = { headers: { "Content-Type": "application/json" } };
-    
-        const {data}=await axios.post(
-            "http://localhost:7000/auth/register",
-            userData,
-            config,
-        )
-        console.log(data)
-        dispatch({type:REGISTER_USER_SUCCESS,payload:data.newUser})
-    }catch(error){
-        console.log(error)
-        dispatch({type:REGISTER_USER_FAIL,payload:error.message})
-    }
-}
 
-
+    const { data } = await axios.post(
+      "https://jellyfish-app-4v9we.ondigitalocean.app/auth/register",
+      userData,
+      config
+    );
+    console.log(data);
+    dispatch({ type: REGISTER_USER_SUCCESS, payload: data.newUser });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
+  }
+};
 
 //Load user details
-export const laodUser=()=>async (dispatch)=>{
-    try{
-        dispatch({type:LOAD_USER_REQUEST})
-        
-   
-        const {data}=await axios.get(`http://localhost:7000/auth/me`);
+export const laodUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_USER_REQUEST });
 
-console.log(data)
-        
-        dispatch({type:LOAD_USER_SUCCESS,payload:data.userDetails})
-    }catch(error){
-        dispatch({type:LOAD_USER_FAIL,payload:error.response.data.message})
-    }
-}
+    const { data } = await axios.get(
+      `https://jellyfish-app-4v9we.ondigitalocean.app/auth/me`
+    );
+
+    console.log(data);
+
+    dispatch({ type: LOAD_USER_SUCCESS, payload: data.userDetails });
+  } catch (error) {
+    dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message });
+  }
+};

@@ -27,7 +27,7 @@ connectDataBase();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://mongo.d312y57inv813w.amplifyapp.com",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
