@@ -13,7 +13,39 @@ import {
   REGISTER_USER_SUCCESS,
 } from "../constants/userConstants";
 
-//Login User
+// Helper function to get cookie by name
+const getCookie = (name) => {
+  const cookieValue = document.cookie.match(
+    "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
+  );
+  return cookieValue ? cookieValue.pop() : "";
+};
+
+// Load user details from JWT on page load
+export const loadUserFromCookies = () => async (dispatch) => {
+  const token = getCookie("token");
+  if (token) {
+    try {
+      dispatch({ type: LOAD_USER_REQUEST });
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `https://hammerhead-app-jyvj3.ondigitalocean.app/auth/me`,
+        config
+      );
+      dispatch({ type: LOAD_USER_SUCCESS, payload: data.userDetails });
+    } catch (error) {
+      dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message });
+    }
+  } else {
+    dispatch({ type: LOAD_USER_FAIL, payload: "No token found" });
+  }
+};
+
+// Login User
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST });
@@ -25,31 +57,27 @@ export const login = (email, password) => async (dispatch) => {
       config
     );
 
-    // Set cookies here
+    // Set JWT cookie here
     if (data && data.success) {
-      // Assuming your cookies are set in the response headers,
-      // you can modify this part based on your actual implementation
-      const { _id, email } = data.user;
-      document.cookie = `_id=${_id};`;
-      document.cookie = `email=${email};`;
+      document.cookie = `token=${data.token}; path=/;`;
+      dispatch({ type: LOGIN_SUCCESS, payload: data.user });
+    } else {
+      dispatch({ type: LOGIN_FAIL, payload: "Login failed" });
     }
-
-    dispatch({ type: LOGIN_SUCCESS, payload: data.user });
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
   }
 };
 
-//Logout  user details
+// Logout user and clear user state
 export const logout = () => async (dispatch) => {
   try {
     await axios.get(
       `https://hammerhead-app-jyvj3.ondigitalocean.app/auth/logout`
     );
 
-    // Clear cookies on logout
-    document.cookie = "_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    // Clear JWT cookie on logout
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
@@ -57,7 +85,7 @@ export const logout = () => async (dispatch) => {
   }
 };
 
-//Register User
+// Register User
 export const register = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
@@ -69,26 +97,32 @@ export const register = (userData) => async (dispatch) => {
       userData,
       config
     );
-    console.log(data);
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data.newUser });
   } catch (error) {
-    console.log(error);
     dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
   }
 };
 
-//Load user details
+// Load user details (used if token is already present in cookies)
 export const laodUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
 
-    const { data } = await axios.get(
-      `https://hammerhead-app-jyvj3.ondigitalocean.app/auth/me`
-    );
-
-    console.log(data);
-
-    dispatch({ type: LOAD_USER_SUCCESS, payload: data.userDetails });
+    const token = getCookie("token");
+    if (token) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `https://hammerhead-app-jyvj3.ondigitalocean.app/auth/me`,
+        config
+      );
+      dispatch({ type: LOAD_USER_SUCCESS, payload: data.userDetails });
+    } else {
+      dispatch({ type: LOAD_USER_FAIL, payload: "No token found" });
+    }
   } catch (error) {
     dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message });
   }

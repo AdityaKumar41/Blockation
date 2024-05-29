@@ -5,8 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../actions/userAction";
 
 const SignIn = () => {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -17,14 +17,18 @@ const SignIn = () => {
     dispatch(login(email, password));
   };
 
-  const opengoogleLogin = () => {
-    window.open("https://hammerhead-app-jyvj3.ondigitalocean.app/auth/google");
+  const openGoogleLogin = () => {
+    window.open(
+      "https://hammerhead-app-jyvj3.ondigitalocean.app/auth/google",
+      "_self"
+    );
   };
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/account");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <div>
@@ -38,30 +42,29 @@ const SignIn = () => {
                 data-wow-delay=".15s"
               >
                 <div className="mb-10 text-center">
-                  <a
-                    href="javascript:void(0)"
-                    className="mx-auto inline-block max-w-[160px]"
-                  >
+                  <span className="mx-auto inline-block max-w-[160px]">
                     Sign In
-                  </a>
+                  </span>
                 </div>
                 <form encType="multipart/form-data" onSubmit={signinSubmit}>
                   <div className="mb-6">
                     <input
                       type="email"
                       value={email}
-                      onChange={(e) => setemail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="Email"
                       className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none transition focus:border-primary focus-visible:shadow-none"
+                      required
                     />
                   </div>
                   <div className="mb-6">
                     <input
                       value={password}
-                      onChange={(e) => setpassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}
                       type="password"
                       placeholder="Password"
                       className="bordder-[#E9EDF4] w-full rounded-md border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none transition focus:border-primary focus-visible:shadow-none"
+                      required
                     />
                   </div>
                   <div className="mb-10">
@@ -75,8 +78,8 @@ const SignIn = () => {
                 <p className="mb-6 text-base text-[#adadad]">Connect With</p>
                 <ul className="-mx-2 mb-12 flex justify-between">
                   <li className="w-full px-2">
-                    <a
-                      onClick={() => opengoogleLogin()}
+                    <span
+                      onClick={openGoogleLogin}
                       className="flex h-11 cursor-pointer items-center justify-center rounded-md bg-[#D64937] transition hover:bg-opacity-90"
                     >
                       <svg
@@ -91,20 +94,20 @@ const SignIn = () => {
                           fill="white"
                         />
                       </svg>
-                    </a>
+                    </span>
                   </li>
                 </ul>
-                <a
-                  href="javascript:void(0)"
+                <Link
+                  to="/forgot-password"
                   className="mb-2 inline-block text-base text-[#adadad] hover:text-primary"
                 >
                   Forget Password?
-                </a>
+                </Link>
                 <p className="text-base text-[#adadad]">
-                  Not a member yet?
-                  <a href="/register" className="text-primary hover:underline">
+                  Not a member yet?{" "}
+                  <Link to="/register" className="text-primary hover:underline">
                     Sign Up
-                  </a>
+                  </Link>
                 </p>
 
                 <div>

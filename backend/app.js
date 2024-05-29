@@ -1,27 +1,26 @@
-const cookieSession = require("cookie-session");
-const IPFS = require("ipfs-http-client");
 const express = require("express");
-const auth = require("./middlewares/auth");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const passportSetup = require("./passport");
-const passport = require("passport");
 const authRoute = require("./routes/auth");
-const app = express();
 const fileUpload = require("./routes/fileupload");
 const adminRoute = require("./routes/admin");
+const errorMiddleware = require("./middlewares/error");
+const auth = require("./middlewares/auth");
 require("dotenv").config();
 
-const errorMiddleware = require("./middlewares/error");
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({ path: __dirname + "/config/config.env" });
 }
 
 const PORT = process.env.PORT || 7000;
-//Database connectivity
-const connectDataBase = require("./config/databBase");
 
+// Database connectivity
+const connectDataBase = require("./config/databBase");
 connectDataBase();
+
+const app = express();
 
 // Updated CORS configuration
 app.use(
@@ -34,44 +33,75 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-// Updated cookie session configuration
-app.use(
-  cookieSession({
-    name: "session",
-    keys: ["_id", "email"],
-    maxAge: 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === "PRODUCTION", // Set cookies to secure in production
-    httpOnly: true, // Ensure cookies are not accessible via client-side JavaScript
-    sameSite: process.env.NODE_ENV === "PRODUCTION" ? "none" : "lax", // Adjust SameSite attribute based on environment
-  })
-);
+// Authentication route for login
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  // Implement user authentication (validate username and password)
+  // This is a placeholder for actual user validation logic
+  const user = { id: 1, username: username }; // This should come from the database
 
-app.use(passport.initialize());
-app.use(passport.session());
+  if (user) {
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
 
-app.use((req, res, next) => {
-  console.log("Session:", req.session);
-  console.log("User:", req.user);
-  next();
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "PRODUCTION",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
+    res.status(200).json({ success: true, message: "Logged in successfully" });
+  } else {
+    res.status(401).json({ success: false, message: "Invalid credentials" });
+  }
 });
 
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res
+      .status(403)
+      .json({ success: false, message: "No token provided" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Failed to authenticate token" });
+    }
+    req.user = decoded;
+    next();
+  });
+};
+
+// Use the verifyToken middleware for protected routes
 app.use("/auth", authRoute);
 app.use("/file", fileUpload);
 app.use("/admin", adminRoute);
 
-app.get("/", (req, res) => {
+app.get("/", verifyToken, (req, res) => {
   if (req.user) {
     res.status(200).json(req.user);
   } else {
     res.status(200).json({
       success: true,
-      message: "User not got",
+      message: "User not found",
     });
   }
 });
 
-//error Middleware
+// Error middleware
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {
